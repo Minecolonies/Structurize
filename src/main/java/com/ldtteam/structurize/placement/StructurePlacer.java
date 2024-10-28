@@ -282,7 +282,7 @@ public class StructurePlacer
                                 continue;
                             }
 
-                            List<ItemStack> requiredItems = ItemStackUtils.getListOfStackForEntity(entity, pos);
+                            List<ItemStack> requiredItems = ItemStackUtils.getListOfStackForEntity(entity);
                             if (!handler.isCreative())
                             {
                                 if (requiredItems == null)
@@ -465,7 +465,7 @@ public class StructurePlacer
                                 continue;
                             }
 
-                            List<ItemStack> requiredItems = ItemStackUtils.getListOfStackForEntity(entity, pos);
+                            List<ItemStack> requiredItems = ItemStackUtils.getListOfStackForEntity(entity);
                             if (!handler.isCreative())
                             {
                                 if (requiredItems == null)
@@ -620,7 +620,7 @@ public class StructurePlacer
                                 continue;
                             }
 
-                            requiredItems.addAll(ItemStackUtils.getListOfStackForEntity(entity, pos));
+                            requiredItems.addAll(ItemStackUtils.getListOfStackForEntity(entity));
                         }
                     }
                 }

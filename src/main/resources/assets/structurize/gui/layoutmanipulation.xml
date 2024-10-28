@@ -32,4 +32,5 @@
     <button id="cancel" source="structurize:textures/gui/buildtool/cancel.png" size="30" pos="90 213"/>
 
     <button id="settings" source="structurize:textures/gui/buildtool/settings.png" size="30" pos="0 213"/>
+    <button id="contents" source="structurize:textures/gui/buildtool/paste.png" size="32 32" pos="30 212" tooltip="$(com.ldtteam.structurize.gui.scantool.showres)" visible="false"/>
 </window>

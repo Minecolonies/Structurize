@@ -190,4 +190,14 @@ public class ItemStorage
     {
         return stack.getDamageValue();
     }
+
+    /**
+     * Adder for the quantity.
+     *
+     * @param amount the amount to be added.
+     */
+    public void addAmount(final int amount)
+    {
+        setAmount(getAmount() + amount);
+    }
 }

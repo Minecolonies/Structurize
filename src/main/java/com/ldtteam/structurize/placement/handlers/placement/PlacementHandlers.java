@@ -12,7 +12,6 @@ import com.ldtteam.structurize.util.BlockUtils;
 import com.ldtteam.structurize.api.RotationMirror;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
@@ -241,7 +240,7 @@ public final class PlacementHandlers
           @Nullable final CompoundTag tileEntityData,
           final boolean complete)
         {
-            final List<ItemStack> itemList = new ArrayList<>(getItemsFromTileEntity(tileEntityData, blockState, world.registryAccess()));
+            final List<ItemStack> itemList = new ArrayList<>(getItemsFromTileEntity(tileEntityData, blockState, world));
             itemList.add(BlockUtils.getItemStackFromBlockState(blockState));
             itemList.removeIf(ItemStackUtils::isEmpty);
 
@@ -742,7 +741,7 @@ public final class PlacementHandlers
           @Nullable final CompoundTag tileEntityData,
           final boolean complete)
         {
-            final List<ItemStack> itemList = new ArrayList<>(getItemsFromTileEntity(tileEntityData, blockState, world.registryAccess()));
+            final List<ItemStack> itemList = new ArrayList<>(getItemsFromTileEntity(tileEntityData, blockState, world));
             itemList.add(BlockUtils.getItemStackFromBlockState(blockState));
             itemList.removeIf(ItemStackUtils::isEmpty);
             return itemList;
@@ -777,7 +776,7 @@ public final class PlacementHandlers
             try
             {
                 // Try detecting inventory content.
-                ItemStackUtils.getItemStacksOfTileEntity(tileEntityData, blockState, world.registryAccess());
+                ItemStackUtils.getItemStacksOfTileEntity(tileEntityData, blockState, world);
             }
             catch (final Exception ex)
             {
@@ -803,7 +802,7 @@ public final class PlacementHandlers
         {
             final List<ItemStack> itemList = new ArrayList<>();
             itemList.add(BlockUtils.getItemStackFromBlockState(blockState));
-            itemList.addAll(getItemsFromTileEntity(tileEntityData, blockState, world.registryAccess()));
+            itemList.addAll(getItemsFromTileEntity(tileEntityData, blockState, world));
 
             itemList.removeIf(ItemStackUtils::isEmpty);
 
@@ -889,7 +888,7 @@ public final class PlacementHandlers
           @Nullable final CompoundTag tileEntityData,
           final boolean complete)
         {
-            final List<ItemStack> itemList = new ArrayList<>(getItemsFromTileEntity(tileEntityData, blockState, world.registryAccess()));
+            final List<ItemStack> itemList = new ArrayList<>(getItemsFromTileEntity(tileEntityData, blockState, world));
             itemList.add(BlockUtils.getItemStackFromBlockState(blockState));
             itemList.removeIf(ItemStackUtils::isEmpty);
             return itemList;
@@ -971,7 +970,7 @@ public final class PlacementHandlers
           @Nullable final CompoundTag tileEntityData,
           final boolean complete)
         {
-            final List<ItemStack> itemList = new ArrayList<>(getItemsFromTileEntity(tileEntityData, blockState, world.registryAccess()));
+            final List<ItemStack> itemList = new ArrayList<>(getItemsFromTileEntity(tileEntityData, blockState, world));
             itemList.add(BlockUtils.getItemStackFromBlockState(blockState));
             itemList.removeIf(ItemStackUtils::isEmpty);
             return itemList;
@@ -1079,7 +1078,7 @@ public final class PlacementHandlers
      * @param blockState     the block.
      * @return the required list.
      */
-    public static List<ItemStack> getItemsFromTileEntity(final CompoundTag tileEntityData, final BlockState blockState, final HolderLookup.Provider provider)
+    public static List<ItemStack> getItemsFromTileEntity(final CompoundTag tileEntityData, final BlockState blockState, final Level provider)
     {
         if (tileEntityData == null)
         {

@@ -327,6 +327,8 @@ public final class WindowConstants
      */
     public static final String REMOVE_FILTERED = "removefiltered";
 
+    public static final String BUTTON_CONTENTS = "contents";
+
     /**
      * public constructor to hide implicit public one.
      */

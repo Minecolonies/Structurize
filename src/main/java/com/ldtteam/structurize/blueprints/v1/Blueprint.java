@@ -2,6 +2,7 @@ package com.ldtteam.structurize.blueprints.v1;
 
 import com.ldtteam.structurize.api.Log;
 import com.ldtteam.common.fakelevel.IFakeLevelBlockGetter;
+import com.ldtteam.common.util.BlockToItemHelper;
 import com.ldtteam.structurize.api.BlockPosUtil;
 import com.ldtteam.structurize.api.ItemStackUtils;
 import com.ldtteam.structurize.blockentities.BlockEntityTagSubstitution;
@@ -517,8 +518,10 @@ public class Blueprint implements IFakeLevelBlockGetter
      * 
      * @param pos the pos its at.
      * @return an item or null if not initialized.
+     * @deprecated use {@link BlockToItemHelper}
      */
     @Nullable
+    @Deprecated(forRemoval = true, since = "1.21.1")
     public Item getItem(final BlockPos pos)
     {
         @Nullable

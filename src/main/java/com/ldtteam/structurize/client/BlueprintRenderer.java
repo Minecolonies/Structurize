@@ -94,7 +94,7 @@ public class BlueprintRenderer implements AutoCloseable
     private static boolean hasWarnedExceptions = false;
 
     private final BlueprintBlockAccess blockAccess;
-    private List<Entity> entities;
+    List<Entity> entities = List.of();
     private List<BlockEntity> tileEntities;
     private Map<RenderType, VertexBuffer> vertexBuffers;
     private long lastGameTime;

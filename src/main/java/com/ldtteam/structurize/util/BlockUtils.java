@@ -1,5 +1,6 @@
 package com.ldtteam.structurize.util;
 
+import com.ldtteam.common.util.BlockToItemHelper;
 import com.ldtteam.domumornamentum.client.model.data.MaterialTextureData;
 import com.ldtteam.domumornamentum.entity.block.MateriallyTexturedBlockEntity;
 import com.ldtteam.structurize.api.ItemStackUtils;
@@ -264,6 +265,7 @@ public final class BlockUtils
         return iBlockState.getBlock() == Blocks.WATER;
     }
 
+    @Deprecated(forRemoval = true, since = "1.21")
     private static Item getItem(final BlockState blockState)
     {
         final Block block = blockState.getBlock();
@@ -304,6 +306,7 @@ public final class BlockUtils
         }
     }
 
+    @Deprecated(forRemoval = true, since = "1.21")
     private static Item getItemFromBlock(final Block block)
     {
         return GameData.getBlockItemMap().get(block);
@@ -434,7 +437,9 @@ public final class BlockUtils
      *
      * @param blockState the block and state we are creating an ItemStack for.
      * @return ItemStack fromt the BlockState.
+     * @see BlockToItemHelper
      */
+    @Deprecated(forRemoval = true, since = "1.21")
     public static ItemStack getItemStackFromBlockState(final BlockState blockState)
     {
         if (blockState.getBlock() instanceof final LiquidBlock liquid)

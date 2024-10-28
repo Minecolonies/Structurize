@@ -7,8 +7,10 @@ import com.ldtteam.structurize.api.Log;
 import com.ldtteam.structurize.storage.rendering.types.BlueprintPreviewData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -124,5 +126,14 @@ public final class BlueprintHandler
         }
 
         Minecraft.getInstance().getProfiler().pop();
+    }
+
+    /**
+     * @return list of entities for instantiated renderer (potentially immediately invalid), else empty list
+     */
+    public List<Entity> getOptionalEntitiesForBlueprint(final BlueprintPreviewData previewData)
+    {
+        final BlueprintRenderer renderer = rendererCache.getIfPresent(previewData.getRenderKey());
+        return renderer == null ? List.of() : renderer.entities;
     }
 }

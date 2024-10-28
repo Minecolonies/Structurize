@@ -221,6 +221,9 @@
   "com.ldtteam.structurize.redo": "Redo %s",
   "structurize.gui.undoredo.redoop": "Redo",
   "structurize.gui.undoredo.undoop": "Undo",
-  "com.ldtteam.structurize.gui.scantool.remove_filtered": "Remove Filtered"
-
+  "com.ldtteam.structurize.gui.scantool.remove_filtered": "Remove Filtered",
+  "structurize.gui.content.blocks": "Blocks",
+  "structurize.gui.content.blocks_content": "Block contents",
+  "structurize.gui.content.entities": "Entities",
+  "structurize.gui.content.entities_content": "Entity contents"
 }
