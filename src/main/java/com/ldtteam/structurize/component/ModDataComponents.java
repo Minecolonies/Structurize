@@ -21,6 +21,8 @@ public class ModDataComponents
         savedSynced("tags", TagData.CODEC, TagData.STREAM_CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ScanToolData>> SCAN_TOOL =
         savedSynced("scan_tool", ScanToolData.CODEC, ScanToolData.STREAM_CODEC);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<CapturedBlock>> CAPTURED_BLOCK =
+        savedSynced("captured_block", CapturedBlock.CODEC, CapturedBlock.STREAM_CODEC);
 
     private static <D> DeferredHolder<DataComponentType<?>, DataComponentType<D>> savedSynced(final String name,
         final Codec<D> codec,

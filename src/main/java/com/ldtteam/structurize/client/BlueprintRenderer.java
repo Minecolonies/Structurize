@@ -6,6 +6,7 @@ import com.ldtteam.structurize.blocks.ModBlocks;
 import com.ldtteam.structurize.blueprints.v1.Blueprint;
 import com.ldtteam.structurize.blueprints.v1.BlueprintUtils;
 import com.ldtteam.structurize.client.fakelevel.BlueprintBlockAccess;
+import com.ldtteam.structurize.component.CapturedBlock;
 import com.ldtteam.structurize.storage.rendering.types.BlueprintPreviewData;
 import com.ldtteam.structurize.tag.ModTags;
 import com.ldtteam.structurize.util.BlockInfo;
@@ -79,7 +80,6 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -159,10 +159,10 @@ public class BlueprintRenderer implements AutoCloseable
             {
                 if (tileEntitiesMap.remove(blockPos) instanceof final BlockEntityTagSubstitution tagTE)
                 {
-                    final BlockEntityTagSubstitution.ReplacementBlock replacement = tagTE.getReplacement();
-                    state = replacement.getBlockState();
+                    final CapturedBlock replacement = tagTE.getReplacement();
+                    state = replacement.blockState();
 
-                    Optional.ofNullable(replacement.createBlockEntity(blockPos, blueprint.getRegistryAccess())).ifPresent(newBe -> {
+                    replacement.serializedBE().map(tag -> BlockEntity.loadStatic(blockPos, replacement.blockState(), tag, blueprint.getRegistryAccess())).ifPresent(newBe -> {
                         newBe.setLevel(blockAccess);
                         teModelData.put(blockPos, newBe.getModelData());
                         tileEntitiesMap.put(blockPos, newBe);
