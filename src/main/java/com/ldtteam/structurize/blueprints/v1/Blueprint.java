@@ -8,17 +8,20 @@ import com.ldtteam.structurize.blockentities.BlockEntityTagSubstitution;
 import com.ldtteam.structurize.blockentities.ModBlockEntities;
 import com.ldtteam.structurize.blocks.ModBlocks;
 import com.ldtteam.structurize.blocks.interfaces.IAnchorBlock;
-import com.ldtteam.structurize.blueprints.FacingFixer;
+import com.ldtteam.structurize.component.CapturedBlock;
 import com.ldtteam.structurize.blockentities.interfaces.IBlueprintDataProviderBE;
 import com.ldtteam.structurize.util.BlockInfo;
 import com.ldtteam.structurize.util.BlockUtils;
 import com.ldtteam.structurize.util.BlueprintPositionInfo;
+import com.mojang.serialization.DynamicOps;
 import com.ldtteam.structurize.api.RotationMirror;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
@@ -653,6 +656,7 @@ public class Blueprint implements IFakeLevelBlockGetter
             return;
         }
 
+        final DynamicOps<Tag> dynamicNbtOps = registryAccess.createSerializationContext(NbtOps.INSTANCE);
         final BlockPos primaryOffset = getPrimaryBlockOffset();
         final short newSizeX, newSizeZ, newSizeY = sizeY;
 
@@ -677,14 +681,7 @@ public class Blueprint implements IFakeLevelBlockGetter
         final List<BlockState> palette = new ArrayList<>();
         for (int i = 0; i < this.palette.size(); i++)
         {
-            BlockState bs = this.palette.get(i);
-
-            if (transformBy.isMirrored())
-            {
-                bs = FacingFixer.fixMirroredFacing(bs.mirror(transformBy.mirror()), bs);
-            }
-
-            palette.add(i, bs.rotate(transformBy.rotation()));
+            palette.add(i, transformBy.applyToBlockState(this.palette.get(i)));
         }
 
         final BlockPos extremes = transformBy.applyToPos(new BlockPos(sizeX, sizeY, sizeZ));
@@ -723,10 +720,9 @@ public class Blueprint implements IFakeLevelBlockGetter
                         //       for now this is the minimal requirement.
                         if (compound.getString("id").equals(ModBlockEntities.TAG_SUBSTITUTION.getId().toString()))
                         {
-                            BlockEntityTagSubstitution.ReplacementBlock replacement =
-                                    new BlockEntityTagSubstitution.ReplacementBlock(compound, registryAccess);
-                            replacement = replacement.rotateWithMirror(tempPos, transformBy, level);
-                            replacement.write(compound, registryAccess);
+                            CapturedBlock replacement = BlockEntityTagSubstitution.deserializeReplacement(compound, dynamicNbtOps);
+                            replacement = replacement.applyRotationMirror(transformBy, level);
+                            BlockEntityTagSubstitution.serializeReplacement(compound, dynamicNbtOps, replacement);
                         }
 
                         if (compound.contains(TAG_BLUEPRINTDATA))

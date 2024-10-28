@@ -7,9 +7,11 @@ import com.ldtteam.structurize.api.Log;
 import com.ldtteam.structurize.api.constants.Constants;
 import com.ldtteam.structurize.client.model.OverlaidModelLoader;
 import com.ldtteam.structurize.items.ItemStackTooltip;
+import com.ldtteam.structurize.items.ModItems;
 import com.ldtteam.structurize.placement.handlers.placement.PlacementHandlers.ContainerPlacementHandler;
 import com.ldtteam.structurize.storage.ClientStructurePackLoader;
 import com.ldtteam.structurize.util.WorldRenderMacros;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -30,6 +32,8 @@ import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterRenderBuffersEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -112,5 +116,18 @@ public class ClientLifecycleSubscriber
     public static void registerGlobablRenderBuffers(final RegisterRenderBuffersEvent event)
     {
         WorldRenderMacros.RenderTypes.registerBuffer(event);
+    }
+
+    @SubscribeEvent
+    public static void registerClientExtensions(final RegisterClientExtensionsEvent event)
+    {
+        event.registerItem(new IClientItemExtensions()
+        {
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer()
+            {
+                return TagSubstitutionRenderer.getInstance();
+            }
+        }, ModItems.blockTagSubstitution.get());
     }
 }

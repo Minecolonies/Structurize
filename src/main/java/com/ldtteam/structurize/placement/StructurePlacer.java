@@ -333,8 +333,8 @@ public class StructurePlacer
         {
             if (tileEntityData != null && BlockEntity.loadStatic(localPos, localState, tileEntityData, world.registryAccess()) instanceof BlockEntityTagSubstitution tagEntity)
             {
-                localState = tagEntity.getReplacement().getBlockState();
-                tileEntityData = tagEntity.getReplacement().getBlockEntityTag();
+                localState = tagEntity.getReplacement().blockState();
+                tileEntityData = tagEntity.getReplacement().serializedBE().orElseGet(CompoundTag::new);
             }
             else
             {
@@ -644,8 +644,8 @@ public class StructurePlacer
         {
             if (tileEntityData != null && BlockEntity.loadStatic(localPos, localState, tileEntityData, world.registryAccess()) instanceof BlockEntityTagSubstitution tagEntity)
             {
-                localState = tagEntity.getReplacement().getBlockState();
-                tileEntityData = tagEntity.getReplacement().getBlockEntityTag();
+                localState = tagEntity.getReplacement().blockState();
+                tileEntityData = tagEntity.getReplacement().serializedBE().orElseGet(CompoundTag::new);
             }
             else
             {

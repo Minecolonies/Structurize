@@ -1,13 +1,16 @@
 package com.ldtteam.structurize.api;
 
 import com.ldtteam.common.codec.Codecs;
+import com.ldtteam.structurize.blueprints.FacingFixer;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec3;
 
@@ -179,6 +182,36 @@ public enum RotationMirror
     public Vec3 applyToPos(final Vec3 pos, final BlockPos pivot)
     {
         return StructureTemplate.transform(pos, mirror, rotation, pivot);
+    }
+
+    /**
+     * @param blockState blockState to transform
+     * @return transformed blockState using this rot+mir
+     * @deprecated use {@link #applyToBlockState(BlockState, Level, BlockPos)}, see vanilla methods for more info
+     */
+    @Deprecated
+    public BlockState applyToBlockState(BlockState blockState)
+    {
+        if (isMirrored())
+        {
+            blockState = FacingFixer.fixMirroredFacing(blockState.mirror(mirror), blockState);
+        }
+        return blockState.rotate(rotation);
+    }
+
+    /**
+     * @param blockState blockState to transform
+     * @param level      in which given blockState lives
+     * @param pos        where the given blockState is in given level
+     * @return transformed blockState using this rot+mir
+     */
+    public BlockState applyToBlockState(BlockState blockState, final Level level, final BlockPos pos)
+    {
+        if (isMirrored())
+        {
+            blockState = FacingFixer.fixMirroredFacing(blockState.mirror(mirror), blockState);
+        }
+        return blockState.rotate(level, pos, rotation);
     }
 
     /**

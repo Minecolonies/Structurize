@@ -58,9 +58,9 @@ public class BlueprintBlockAccess extends FakeLevel<Blueprint>
             }
             else if (state.getBlock() == ModBlocks.blockTagSubstitution.get())
             {
-                if (super.getBlockEntity(pos) instanceof final BlockEntityTagSubstitution tag && !tag.getReplacement().isEmpty())
+                if (super.getBlockEntity(pos) instanceof final BlockEntityTagSubstitution tag)
                 {
-                    return tag.getReplacement().getBlockState();
+                    return tag.getReplacement().blockState();
                 }
                 return Blocks.AIR.defaultBlockState();
             }

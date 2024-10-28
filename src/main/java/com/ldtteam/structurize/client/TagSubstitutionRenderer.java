@@ -1,8 +1,8 @@
 package com.ldtteam.structurize.client;
 
+import com.ldtteam.common.fakelevel.SingleBlockFakeLevel;
 import com.ldtteam.structurize.blockentities.BlockEntityTagSubstitution;
-import com.ldtteam.structurize.blueprints.v1.Blueprint;
-import com.ldtteam.structurize.client.fakelevel.BlueprintBlockAccess;
+import com.ldtteam.structurize.component.CapturedBlock;
 import com.ldtteam.structurize.items.ItemTagSubstitution;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import net.neoforged.neoforge.client.model.data.ModelData;
@@ -35,6 +35,7 @@ public class TagSubstitutionRenderer extends BlockEntityWithoutLevelRenderer imp
 
 
     private final BlockEntityRendererProvider.Context context;
+    private SingleBlockFakeLevel renderLevel;
 
     public TagSubstitutionRenderer(@NotNull final BlockEntityRendererProvider.Context context)
     {
@@ -72,11 +73,11 @@ public class TagSubstitutionRenderer extends BlockEntityWithoutLevelRenderer imp
             this.context.getBlockRenderDispatcher().renderSingleBlock(anchor.getBlock().defaultBlockState(),
                     poseStack, buffers, packedLight, packedOverlay, ModelData.EMPTY, renderType);
 
-            render(anchor.getAbsorbedBlock(stack, context.getBlockEntityRenderDispatcher().level.registryAccess()), BlockPos.ZERO, 0, poseStack, buffers, packedLight, packedOverlay, renderType);
+            render(CapturedBlock.readFromItemStack(stack), BlockPos.ZERO, 0, poseStack, buffers, packedLight, packedOverlay, renderType);
         }
     }
 
-    private void render(@NotNull final BlockEntityTagSubstitution.ReplacementBlock replacement,
+    private void render(@NotNull final CapturedBlock replacement,
                         @NotNull final BlockPos pos,
                         final float partialTick,
                         @NotNull PoseStack poseStack,
@@ -85,35 +86,45 @@ public class TagSubstitutionRenderer extends BlockEntityWithoutLevelRenderer imp
                         final int packedOverlay,
                         @NotNull final RenderType renderType)
     {
-        if (!replacement.isEmpty())
+        if (replacement.blockState().isAir())
         {
-            poseStack.pushPose();
-            poseStack.scale(0.98f,0.98f,0.98f);
-            poseStack.translate(0.01f, 0.01f, 0.01f);
-
-            final BlockRenderDispatcher dispatcher = this.context.getBlockRenderDispatcher();
-
-            final BlockEntity replacementEntity = replacement.getBlockEntity(pos, context.getBlockEntityRenderDispatcher().level.registryAccess());
-            if (replacementEntity != null)
-            {
-                // seems a little silly to create a blueprint, but the entityDispatcher won't render without a level...
-                final Blueprint blueprint = replacement.createBlueprint(context.getBlockEntityRenderDispatcher().level.registryAccess());
-                final BlueprintBlockAccess blockAccess = new BlueprintBlockAccess(blueprint);
-                replacementEntity.setLevel(blockAccess);
-
-                final BlockEntityRenderDispatcher entityDispatcher = this.context.getBlockEntityRenderDispatcher();
-                if (replacement.getBlockState().getRenderShape() == RenderShape.MODEL)
-                {
-                    dispatcher.renderSingleBlock(replacement.getBlockState(), poseStack, buffers, packedLight, packedOverlay, replacementEntity.getModelData(), renderType);
-                }
-                entityDispatcher.render(replacementEntity, partialTick, poseStack, buffers);
-            }
-            else
-            {
-                dispatcher.renderSingleBlock(replacement.getBlockState(), poseStack, buffers, packedLight, packedOverlay, ModelData.EMPTY, renderType);
-            }
-
-            poseStack.popPose();
+            return;
         }
+
+        poseStack.pushPose();
+        poseStack.scale(0.995f, 0.995f, 0.995f);
+        poseStack.translate(0.0025f, 0.0025f, 0.0025f);
+
+        if (replacement.hasBlockEntity())
+        {
+            final BlockEntityRenderDispatcher entityDispatcher = this.context.getBlockEntityRenderDispatcher();
+            final Level realLevel = entityDispatcher.level;
+            if (renderLevel == null)
+            {
+                renderLevel = new SingleBlockFakeLevel(realLevel);
+            }
+
+            renderLevel.withFakeLevelContext(replacement.blockState(),
+                BlockEntity.loadStatic(BlockPos.ZERO, replacement.blockState(), replacement.serializedBE().get(), realLevel.registryAccess()),
+                realLevel,
+                fakeLevel -> {
+                    context.getBlockRenderDispatcher()
+                        .renderSingleBlock(replacement.blockState(),
+                            poseStack,
+                            buffers,
+                            packedLight,
+                            packedOverlay,
+                            renderLevel.getLevelSource().blockEntity.getModelData(),
+                            renderType);
+                    entityDispatcher.render(renderLevel.getLevelSource().blockEntity, partialTick, poseStack, buffers);
+                });
+        }
+        else
+        {
+            context.getBlockRenderDispatcher()
+                .renderSingleBlock(replacement.blockState(), poseStack, buffers, packedLight, packedOverlay, ModelData.EMPTY, renderType);
+        }
+
+        poseStack.popPose();
     }
 }
