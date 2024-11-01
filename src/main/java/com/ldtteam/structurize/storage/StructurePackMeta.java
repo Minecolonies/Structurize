@@ -91,7 +91,7 @@ public class StructurePackMeta
         this.rootPath = rootPath;
         this.version = json.get("version").getAsDouble();
         this.packFormat  = json.get("pack-format").getAsInt();
-        this.owner = owner;
+        this.owner = json.has("owner") ? json.get("owner").getAsString() : owner;
     }
 
     public String getName()
