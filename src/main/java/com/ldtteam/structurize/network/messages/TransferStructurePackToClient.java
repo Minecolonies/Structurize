@@ -7,6 +7,7 @@ import com.ldtteam.structurize.storage.ClientStructurePackLoader;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -40,7 +41,8 @@ public class TransferStructurePackToClient extends AbstractClientPlayMessage
         super(buf, type);
         this.packname = buf.readUtf(32767);
         this.eol = buf.readBoolean();
-        this.payload = Unpooled.wrappedBuffer(buf.readByteArray());
+        final int size = buf.readInt();
+        this.payload = Unpooled.wrappedBuffer(buf.readBytes(size));
     }
 
     /**
@@ -62,8 +64,10 @@ public class TransferStructurePackToClient extends AbstractClientPlayMessage
     {
         buf.writeUtf(this.packname);
         buf.writeBoolean(this.eol);
-        buf.writeByteArray(this.payload.array());
-        this.payload.release();
+        final int size = this.payload.readableBytes();
+        buf.writeInt(size);
+        buf.writeBytes(this.payload, size);
+        this.payload.resetReaderIndex();
     }
 
     @Override
