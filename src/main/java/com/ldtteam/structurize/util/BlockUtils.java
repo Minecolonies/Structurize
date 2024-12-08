@@ -105,7 +105,7 @@ public final class BlockUtils
             ForgeRegistries.BLOCKS.getValues()
                 .stream()
                 .filter(BlockUtils::canBlockSurviveWithoutSupport)
-                .filter(block -> !block.defaultBlockState().isAir() && !(block instanceof LiquidBlock) && !block.builtInRegistryHolder().is(ModTags.WEAK_SOLID_BLOCKS))
+                .filter(block -> !block.defaultBlockState().canBeReplaced() && block.hasCollision && !block.defaultBlockState().isAir() && !(block instanceof LiquidBlock) && !block.builtInRegistryHolder().is(ModTags.WEAK_SOLID_BLOCKS))
                 .forEach(trueSolidBlocks::add);
         }
     }
@@ -834,6 +834,11 @@ public final class BlockUtils
         if (blockState.getBlock() instanceof final LeavesBlock leaves)
         {
             return leaves.isRandomlyTicking(blockState);
+        }
+
+        if (blockState.canBeReplaced() || !blockState.getBlock().hasCollision)
+        {
+            return false;
         }
 
         final Block block = blockState.getBlock();
