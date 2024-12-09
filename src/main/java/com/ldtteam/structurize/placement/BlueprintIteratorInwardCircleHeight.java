@@ -22,6 +22,7 @@ public class BlueprintIteratorInwardCircleHeight extends AbstractBlueprintIterat
     @Override
     public Result increment()
     {
+        this.prevProgressPos.set(this.progressPos);
         if (this.progressPos.equals(NULL_POS))
         {
             this.progressPos.set(0, 0, 0);
@@ -42,6 +43,7 @@ public class BlueprintIteratorInwardCircleHeight extends AbstractBlueprintIterat
     @Override
     public Result decrement()
     {
+        this.prevProgressPos.set(this.progressPos);
         if (this.progressPos.equals(NULL_POS))
         {
             this.progressPos.set(0, topRightCorner.getY(), 0);

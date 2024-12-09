@@ -84,6 +84,12 @@ public interface IBlueprintIterator
     BlockPos getProgressPos();
 
     /**
+     * Get the last position before the progress pos of the iterator.
+     * @return the prev progress pos.
+     */
+    BlockPos getPrevProgressPos();
+
+    /**
      * Get the size of the blueprint which is iterated over
      * @return the size
      */

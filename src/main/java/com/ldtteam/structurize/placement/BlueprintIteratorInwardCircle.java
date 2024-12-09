@@ -32,6 +32,7 @@ public class BlueprintIteratorInwardCircle extends AbstractBlueprintIterator
      */
     public Result iterate(final boolean up)
     {
+        this.prevProgressPos.set(this.progressPos);
         if (this.progressPos.equals(NULL_POS))
         {
             this.progressPos.set(-1, up ? 0 : this.size.getY() - 1, 0);

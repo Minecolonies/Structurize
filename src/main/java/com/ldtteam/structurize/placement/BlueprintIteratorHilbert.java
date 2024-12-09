@@ -31,6 +31,7 @@ public class BlueprintIteratorHilbert extends AbstractBlueprintIterator
     @Override
     public Result increment()
     {
+        this.prevProgressPos.set(this.progressPos);
         if (this.progressPos.equals(NULL_POS))
         {
             this.index = 0;
@@ -44,6 +45,7 @@ public class BlueprintIteratorHilbert extends AbstractBlueprintIterator
     @Override
     public Result decrement()
     {
+        this.prevProgressPos.set(this.progressPos);
         if (this.progressPos.equals(NULL_POS))
         {
             this.index = (this.size.getY() & 1) == 0 ? this.positions.size() - 1 : 0;
