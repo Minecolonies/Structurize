@@ -125,6 +125,7 @@ public class StructurePlacer
         {
             final BlockPos localPos = iterator.getProgressPos();
             final BlockPos worldPos = handler.getProgressPosInWorld(localPos);
+            lastPos = iterator.getPrevProgressPos();
 
             if (count >= handler.getStepsPerCall())
             {
@@ -134,7 +135,6 @@ public class StructurePlacer
             final BlockState localState = handler.getBluePrint().getBlockState(localPos);
             if (localState == null || world.isOutsideBuildHeight(worldPos))
             {
-                lastPos = localPos;
                 iterationResult = iterateFunction.get();
                 continue;
             }
