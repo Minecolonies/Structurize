@@ -43,6 +43,7 @@ public class BlueprintIteratorRandom extends AbstractBlueprintIterator
      */
     public Result increment()
     {
+        this.prevProgressPos.set(this.progressPos);
         if (this.progressPos.equals(NULL_POS))
         {
             this.progressPos.set(this.positions.get(0).getX(), 0, this.positions.get(0).getZ());
@@ -75,6 +76,7 @@ public class BlueprintIteratorRandom extends AbstractBlueprintIterator
      */
     public Result decrement()
     {
+        this.prevProgressPos.set(this.progressPos);
         if (this.progressPos.equals(NULL_POS))
         {
             this.progressPos.set(this.positions.get(0).getX(), this.size.getY() - 1, this.positions.get(0).getZ());

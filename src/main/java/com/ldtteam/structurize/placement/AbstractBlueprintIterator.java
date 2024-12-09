@@ -15,15 +15,20 @@ import java.util.function.Supplier;
  */
 public abstract class AbstractBlueprintIterator implements IBlueprintIterator
 {
-
     /**
      * The position we use as our uninitialized value.
      */
     public static final BlockPos NULL_POS = new BlockPos(-1, -1, -1);
+
     /**
      * The Structure position we are at. Defaulted to NULL_POS.
      */
     protected final BlockPos.MutableBlockPos progressPos = new BlockPos.MutableBlockPos(-1, -1, -1);
+
+    /**
+     * The previous position before the current progress position.
+     */
+    protected final BlockPos.MutableBlockPos prevProgressPos = new BlockPos.MutableBlockPos(-1, -1, -1);
 
     /**
      * The size of the structure.
@@ -118,6 +123,7 @@ public abstract class AbstractBlueprintIterator implements IBlueprintIterator
     @Override
     public void setProgressPos(final BlockPos localPosition)
     {
+        this.prevProgressPos.set(this.progressPos);
         if (localPosition.equals(NULL_POS))
         {
             this.progressPos.set(localPosition);
@@ -163,6 +169,7 @@ public abstract class AbstractBlueprintIterator implements IBlueprintIterator
     @Override
     public void reset()
     {
+        prevProgressPos.set(NULL_POS);
         progressPos.set(NULL_POS);
         includeEntities = false;
         isRemoving = false;
@@ -178,6 +185,12 @@ public abstract class AbstractBlueprintIterator implements IBlueprintIterator
     public BlockPos getProgressPos()
     {
         return progressPos.immutable();
+    }
+
+    @Override
+    public BlockPos getPrevProgressPos()
+    {
+        return prevProgressPos.immutable();
     }
 
     protected IStructureHandler getStructureHandler()
