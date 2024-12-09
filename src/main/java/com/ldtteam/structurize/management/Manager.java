@@ -56,15 +56,19 @@ public final class Manager
      */
     public static void onWorldTick(final ServerLevel world)
     {
+        int count = 0;
         if (!scanToolOperationPool.isEmpty())
         {
-            final ITickedWorldOperation operation = scanToolOperationPool.peek();
-            if (operation != null && operation.apply(world))
+            while (count++ <= Structurize.getConfig().getServer().maxOperationsPerTick.get())
             {
-                scanToolOperationPool.pop();
-                if (!(operation instanceof UndoOperation || operation instanceof RedoOperation))
+                final ITickedWorldOperation operation = scanToolOperationPool.peek();
+                if (operation != null && operation.apply(world))
                 {
-                    addToUndoRedoCache(operation.getChangeStorage());
+                    scanToolOperationPool.pop();
+                    if (!(operation instanceof UndoOperation || operation instanceof RedoOperation))
+                    {
+                        addToUndoRedoCache(operation.getChangeStorage());
+                    }
                 }
             }
         }

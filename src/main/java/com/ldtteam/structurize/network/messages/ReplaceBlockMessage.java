@@ -51,8 +51,8 @@ public class ReplaceBlockMessage extends AbstractServerPlayMessage
         super(buf, type);
         this.from = buf.readBlockPos();
         this.to = buf.readBlockPos();
-        this.blockTo = ItemStack.STREAM_CODEC.decode(buf);
-        this.blockFrom = ItemStack.STREAM_CODEC.decode(buf);
+        this.blockTo = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
+        this.blockFrom = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
         this.pct = buf.readInt();
     }
 
