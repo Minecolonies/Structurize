@@ -32,6 +32,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
@@ -761,6 +762,20 @@ public final class BlockUtils
         public boolean hasChunk(int p_9574_, int p_9575_)
         {
             return level.hasChunk(p_9574_, p_9575_);
+        }
+
+        @Override
+        public boolean isOldChunkAround(ChunkPos pos, int radius)
+        {
+            final int minX = pos.x - radius;
+            final int maxX = pos.x + radius;
+            final int minZ = pos.z - radius;
+            final int maxZ = pos.z + radius;
+
+            return chunks.contains(minX, minZ) &&
+                chunks.contains(minX, maxZ) &&
+                chunks.contains(maxX, minZ) &&
+                chunks.contains(maxX, maxZ);
         }
     }
 
