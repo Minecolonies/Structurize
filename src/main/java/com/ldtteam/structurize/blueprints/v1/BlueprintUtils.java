@@ -54,6 +54,10 @@ public final class BlueprintUtils
                     teModelData.put(blockInfo.getPos(), be.getModelData());
                     return new BlockEntityInfo(blockInfo.getPos(), be);
                 }
+                else
+                {
+                    Log.getLogger().error("TileEntity creation failed for: " + blueprint.getFileName() + " " + blockInfo.getPos());
+                }
                 return null;
             })
             .filter(Objects::nonNull)
