@@ -56,7 +56,7 @@ public final class BlueprintUtils
                 }
                 else
                 {
-                    Log.getLogger().error("TileEntity creation failed for: " + blueprint.getFileName() + " " + blockInfo.getPos());
+                    Log.getLogger().error("TileEntity creation failed for: " + blueprint + " " + blockInfo.getPos());
                 }
                 return null;
             })
