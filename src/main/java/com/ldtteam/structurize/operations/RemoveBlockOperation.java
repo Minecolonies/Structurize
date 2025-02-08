@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 
 /**
  * Operation for removing one type of block.
@@ -37,6 +38,10 @@ public class RemoveBlockOperation extends AreaOperation
         {
             storage.addPreviousDataFor(position, world);
             world.removeBlock(position, false);
+            if (!world.getFluidState(position).isEmpty())
+            {
+                world.setBlock(position, Blocks.AIR.defaultBlockState(), 3);
+            }
             storage.addPostDataFor(position, world);
         }
     }
