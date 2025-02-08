@@ -553,6 +553,7 @@ public final class BlockUtils
             // place
             world.setBlock(here, Blocks.COBBLESTONE.defaultBlockState(), Block.UPDATE_CLIENTS);
             world.setBlock(here, newState, Constants.UPDATE_FLAG);
+            world.getBlockEntity(here).applyComponentsFromItemStack(stackToPlace);
             targetBlock.setPlacedBy(world, here, newState, fakePlayer, stackToPlace);
         }
         else if (item instanceof BucketItem)

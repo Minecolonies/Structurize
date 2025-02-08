@@ -23,10 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BedPart;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.block.state.properties.DripstoneThickness;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
@@ -66,6 +63,7 @@ public final class PlacementHandlers
         handlers.add(new DripStoneBlockPlacementHandler());
         handlers.add(new FallingBlockPlacementHandler());
         handlers.add(new BannerPlacementHandler());
+        handlers.add(new DoBlockPlacementHandler());
         handlers.add(new GeneralBlockPlacementHandler());
     }
 
@@ -342,9 +340,11 @@ public final class PlacementHandlers
           @Nullable final CompoundTag tileEntityData,
           final boolean complete)
         {
-            final List<ItemStack> itemList = new ArrayList<>();
-            itemList.add(new ItemStack(Blocks.DIRT));
-            return itemList;
+            if (complete)
+            {
+                return Collections.singletonList(new ItemStack(blockState.getBlock()));
+            }
+            return Collections.singletonList(new ItemStack(Blocks.DIRT));
         }
     }
 
@@ -648,9 +648,11 @@ public final class PlacementHandlers
           @Nullable final CompoundTag tileEntityData,
           final boolean complete)
         {
-            final List<ItemStack> itemList = new ArrayList<>();
-            itemList.add(new ItemStack(Blocks.DIRT, 1));
-            return itemList;
+            if (complete)
+            {
+                return Collections.singletonList(new ItemStack(blockState.getBlock()));
+            }
+            return Collections.singletonList(new ItemStack(Blocks.DIRT));
         }
     }
 
@@ -687,6 +689,10 @@ public final class PlacementHandlers
           @Nullable final CompoundTag tileEntityData,
           final boolean complete)
         {
+            if (complete)
+            {
+                return Collections.singletonList(new ItemStack(blockState.getBlock()));
+            }
             return new ArrayList<>();
         }
     }
